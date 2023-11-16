@@ -10,7 +10,7 @@ This script is contingent on all the target proteins having the same template se
 
 ### USAGE: 
 ```
->python RUN_RepairProtein.py {OPTIONS}
+>>>python RUN_RepairProtein.py {OPTIONS}
     -i --input_dir: directory where .pdb files of target proteins are found
     -o --output_dir: directory where repaired .pdb files will be added
     -f --fasta: path to .fasta file, which will serve as the template sequence to repair the target proteins
