@@ -1,8 +1,8 @@
 # RepairProtein
 
 ## Environment 
-Important dependencies://
-	/t modeller 10.4 -> UCSF Modeller license is necessary to use this package. A free academic license is available at https://salilab.org/modeller/registration.html 
+Important dependencies:\\
+	\t modeller 10.4 -> UCSF Modeller license is necessary to use this package. A free academic license is available at https://salilab.org/modeller/registration.html 
 
 
 ## RUN_RepairProtein.py 
