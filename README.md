@@ -13,9 +13,10 @@ USAGE:\
 >python RUN_RepairProtein.py {OPTIONS}\
 \
 Valid options in inlude:\
+```
     -i --input_dir: directory where .pdb files of target proteins are found\
     -o --output_dir: directory where repaired .pdb files will be added\
     -f --fasta: path to .fasta file, which will serve as the template sequence to repair the target proteins\
-
+```
 
 
