@@ -34,7 +34,7 @@ class RepairProtein():
         self.pdb_fn = pdb_fn
         self.fasta_fn = fasta_fn
         self.working_dir = working_dir
-        self.name = self.pdb_fn.split('.')[0]
+        self.name = self.pdb_fn.split('.pdb')[0]
         try:
             self.name = self.name.split('/')[-1]
         except:
@@ -52,23 +52,27 @@ class RepairProtein():
                 String path to write repaired .pdb file. 
         """
         # Parse template sequence from .fasta
-        temp_pir = self.working_dir + '/' + self.name + '.pir'
-        fasta_to_pir(self.fasta_fn, temp_pir)
-        temp_seq = parse_sequence(temp_pir)
+        self.temp_pir_fn = self.working_dir + '/' + self.name + '.pir'
+        fasta_to_pir(self.fasta_fn, self.temp_pir_fn)
+        self.temp_seq = parse_sequence(self.temp_pir_fn)
 
         # Parse target sequence from .pdb
-        tar_pir_fn = self.working_dir + '/' + self.name + '.pir'
+        self.tar_pir_fn = self.working_dir + '/' + self.name + '.pir'
         shutil.copy(self.pdb_fn, self.working_dir + '/' + self.pdb_fn.split('/')[-1])
         pdb_to_pir(self.name, self.working_dir)
-        tar_seq = parse_sequence(tar_pir_fn)
+        self.tar_seq = parse_sequence(self.tar_pir_fn)
 
         # Find missing residues
-        sw = SeqWrap(temp_seq, tar_seq)
+        sw = SeqWrap(self.temp_seq, self.tar_seq)
         sw.find_missing_residues(verbose=False)
+        self.missing_residues = sw.missing_residues
         self.ali_fn = self.working_dir + '/' + self.name + '.ali'
-        sw.write_alignment_file(self.ali_fn, temp_pir)
+        sw.write_alignment_file(self.ali_fn, self.temp_pir_fn)
 
         # Model 
+
+
+
         env = Environ()
         env.io.atom_files_directory = ['.', self.working_dir]
 
@@ -81,13 +85,16 @@ class RepairProtein():
         model.ending_model = 1
 
         cwd = os.getcwd()
+        print('!!!'+cwd)
         os.chdir(self.working_dir)
+        print('!!!'+self.working_dir)
         model.make()
         os.chdir(cwd)
 
         # Move UCSF modeller output to desired location
+        self.pdb_out_fn = pdb_out_fn
         modeller_pdb_out_fn = self.working_dir + '/' + model.outputs[0]['name']
-        shutil.copy(modeller_pdb_out_fn, pdb_out_fn)
+        shutil.copy(modeller_pdb_out_fn, self.pdb_out_fn)
 
 
 
