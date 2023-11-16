@@ -68,7 +68,7 @@ except:
     else:
         print('\tTest passed.')  
 
-    # Check for .ali files
+    # Check for output files
     print('Testing for output file...')
     if not os.path.exists(rp.pdb_out_fn):
         print('\tTest failed: ' + rp.pdb_out_fn + ' does not exist.' )
