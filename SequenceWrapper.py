@@ -38,7 +38,7 @@ class SequenceWrapper():
         self.tar_seq = target_seq
         self.missing_residues = []
 
-    def find_missing_residues(self, verbose: bool=True):
+    def find_missing_residues(self, verbose: bool=True, tails: bool=False):
         """
         Find the missing residues in the target sequence.
 
@@ -46,9 +46,12 @@ class SequenceWrapper():
         -----------
             verbose (bool):
                 If True, will print missing residues and indices of missing residues to console. Default is True.
+            
+            tails (bool):
+                If True, add missing residues to N and C termini.
         """ 
         # Find the missing residues
-        self.missing_residues = _find_missing_residues(tar_seq=self.tar_seq, temp_seq=self.temp_seq, verbose=verbose)
+        self.missing_residues, self.term_residues = _find_missing_residues(tar_seq=self.tar_seq, temp_seq=self.temp_seq, verbose=verbose)
 
     def write_alignment_file(self, ali_fn: str, reference_pir_fn: str):
         """
@@ -76,7 +79,7 @@ Methods:
 """
 
 
-def _find_missing_residues(temp_seq: str, tar_seq: str, verbose: bool=True):
+def _find_missing_residues(temp_seq: str, tar_seq: str, verbose: bool=True, tails: bool=False):
         """
         Find the missing residues in the target sequence.
 
@@ -91,11 +94,15 @@ def _find_missing_residues(temp_seq: str, tar_seq: str, verbose: bool=True):
             verbose (bool):
                 If True, will print missing residues and indices of missing residues to console. Default is True.
 
+            tails (bool):
+                If True, add missing residues to N and C termini.
+
         Returns:
         --------
             missing_residues (np.array): 2-D Array of indices of missing sequence entries and what the missing entry is. e.g. [[0, 'A'], [1, 'B'], [4, 'E'], ....]
         """
         missing_residues = []
+        term_residues = [0,0]
 
         # Find missing residues at start of target sequence
         tar_start_ind = temp_seq.index(tar_seq[:3])
@@ -104,6 +111,7 @@ def _find_missing_residues(temp_seq: str, tar_seq: str, verbose: bool=True):
             missing_residues.append([ind, res])
         
         tar_seq = missing_start + tar_seq
+        term_residues[0] = tar_start_ind
        
         # Iterate through remaining residues
         counter = 0
@@ -123,6 +131,7 @@ def _find_missing_residues(temp_seq: str, tar_seq: str, verbose: bool=True):
 
         # Add remaining missing residues
         upper_ind = len(tar_seq)
+        term_residues[1] = upper_ind
         for i, res in enumerate(temp_seq[upper_ind:]):
             ind = i + upper_ind
             missing_residues.append([ind, res])
@@ -134,7 +143,7 @@ def _find_missing_residues(temp_seq: str, tar_seq: str, verbose: bool=True):
         elif verbose:
             print(f'Missing Residues: {missing_residues}')
 
-        return np.array(missing_residues)
+        return [np.array(missing_residues), term_residues]
 
 def _write_alignment_file(temp_seq: str, missing_residues: np.array, ali_fn: str, reference_pir_fn: str):
     """
