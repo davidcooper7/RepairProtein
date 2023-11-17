@@ -1,5 +1,10 @@
 # RepairProtein
 
+This repo provides a quick and accurate way to model the missing residues in a .pdb file. \
+To use this tool, you need to have the original .pdb you want to fix, and the .fasta file for the corresponding sequence from rcsb.org \
+/mnt/c/Users/backs/Desktop/RepairProtein_README.png
+
+
 ## Environment 
 Important dependencies: 
 - modeller 10.4 -> UCSF Modeller license is necessary to use this package. A free academic license is available at https://salilab.org/modeller/registration.html 
@@ -14,6 +19,7 @@ This script is contingent on all the target proteins having the same template se
     -i --input_dir: directory where .pdb files of target proteins are found
     -o --output_dir: directory where repaired .pdb files will be added
     -f --fasta: path to .fasta file, which will serve as the template sequence to repair the target proteins
+
 ```
 
 
