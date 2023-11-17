@@ -2,7 +2,7 @@
 
 This repo provides a quick and accurate way to model the missing residues in a .pdb file. \
 To use this tool, you need to have the original .pdb you want to fix, and the .fasta file for the corresponding sequence from rcsb.org \
-!RepairProtein_README.png
+![RepairProtein_README](https://github.com/davidcooper7/RepairProtein/assets/117563200/fc44b06a-7911-444a-9010-6d636ae9648e)
 
 ## Environment 
 Important dependencies: 
